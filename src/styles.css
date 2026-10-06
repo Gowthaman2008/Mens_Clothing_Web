@@ -1,0 +1,159 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-cream: var(--cream);
+  --color-ink: var(--ink);
+  --color-lime: var(--lime);
+  --color-cobalt: var(--cobalt);
+  --color-tangerine: var(--tangerine);
+  --color-fuchsia: var(--fuchsia);
+  --color-butter: var(--butter);
+  --color-lavender: var(--lavender);
+  --color-blush: var(--blush);
+  --color-plum: var(--plum);
+  --color-mint: var(--mint);
+  --color-peach: var(--peach);
+  --color-paper: var(--paper);
+
+  --font-serif: "Instrument Serif", Georgia, serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-display: "Anton", "Bebas Neue", Impact, sans-serif;
+  --font-script: "Caveat", cursive;
+}
+
+:root {
+  --radius: 0.75rem;
+  --cream: oklch(0.959 0.016 85);
+  --ink: oklch(0.19 0.017 300);
+  --lime: oklch(0.92 0.19 120);
+  --cobalt: oklch(0.31 0.012 270);
+  --tangerine: oklch(0.65 0.19 38);
+  --fuchsia: oklch(0.2 0.008 300);
+  --butter: oklch(0.88 0.15 95);
+  --lavender: oklch(0.88 0.006 275);
+  --blush: oklch(0.91 0.008 75);
+  --plum: oklch(0.18 0.008 300);
+  --mint: oklch(0.85 0.1 165);
+  --peach: oklch(0.87 0.07 50);
+  --paper: oklch(0.995 0.003 85);
+
+  --background: var(--cream);
+  --foreground: var(--ink);
+  --card: var(--paper);
+  --card-foreground: var(--ink);
+  --popover: var(--paper);
+  --popover-foreground: var(--ink);
+  --primary: var(--ink);
+  --primary-foreground: var(--cream);
+  --secondary: var(--lime);
+  --secondary-foreground: var(--ink);
+  --muted: oklch(0.92 0.015 85);
+  --muted-foreground: oklch(0.5 0.02 300);
+  --accent: var(--lime);
+  --accent-foreground: var(--ink);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: var(--paper);
+  --border: oklch(0.19 0.017 300 / 12%);
+  --input: oklch(0.19 0.017 300 / 15%);
+  --ring: var(--cobalt);
+
+  --shadow-tangerine: 6px 6px 0 var(--tangerine);
+  --glow-ink: 0 25px 50px -15px color-mix(in oklab, var(--tangerine) 70%, transparent);
+}
+
+@layer base {
+  * { border-color: var(--color-border); }
+  html { scroll-behavior: auto; }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--lime); color: var(--ink); }
+  :focus-visible { outline: 2px solid var(--cobalt); outline-offset: 3px; }
+  @media (hover: hover) and (pointer: fine) {
+    body.has-cursor, body.has-cursor a, body.has-cursor button { cursor: none; }
+  }
+}
+
+@utility eyebrow {
+  font-size: 0.68rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+@utility outline-word {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  color: transparent;
+  -webkit-text-stroke: 1.5px color-mix(in oklab, currentColor 0%, var(--ink) 12%);
+  line-height: 0.85;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+@utility arch { border-radius: 999px 999px 1.25rem 1.25rem; }
+@utility shadow-offset { text-shadow: var(--shadow-tangerine); }
+@utility glow-ink { box-shadow: var(--glow-ink); }
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+@utility silk {
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 20%, color-mix(in oklab, var(--fuchsia) 35%, transparent), transparent 70%),
+    radial-gradient(ellipse 50% 60% at 85% 70%, color-mix(in oklab, var(--cobalt) 40%, transparent), transparent 70%),
+    radial-gradient(ellipse 40% 30% at 60% 10%, color-mix(in oklab, var(--butter) 15%, transparent), transparent 70%),
+    var(--plum);
+  background-size: 160% 160%;
+  animation: silk 18s ease-in-out infinite alternate;
+}
+
+@keyframes silk {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 100% 100%; }
+}
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes marquee-rev { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+@keyframes kenburns { from { transform: scale(1); } to { transform: scale(1.12); } }
+@keyframes twinkle { 0%,100% { transform: scale(0.8) rotate(0); opacity: .5 } 50% { transform: scale(1.15) rotate(45deg); opacity: 1 } }
+@keyframes scrolline { 0% { transform: scaleY(0); transform-origin: top } 50% { transform: scaleY(1); transform-origin: top } 51% { transform-origin: bottom } 100% { transform: scaleY(0); transform-origin: bottom } }
+
+@utility animate-marquee { animation: marquee 40s linear infinite; }
+@utility animate-marquee-rev { animation: marquee-rev 40s linear infinite; }
+@utility animate-kenburns { animation: kenburns 22s ease-in-out infinite alternate; }
+@utility animate-twinkle { animation: twinkle 3s ease-in-out infinite; }
+@utility animate-scrolline { animation: scrolline 2.2s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
