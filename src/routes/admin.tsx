@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { LayoutDashboard, Shirt, ShoppingBag, FileText, Users, ShieldCheck, LogOut, ExternalLink } from "lucide-react";
+import { LayoutDashboard, Shirt, ShoppingBag, FileText, Users, ShieldCheck, ExternalLink, Store } from "lucide-react";
 import { useAdmin } from "@/store/admin";
 import { btn, input, Field } from "@/components/admin/ui";
 
@@ -44,12 +44,22 @@ function useAdminHydrated() {
 function AdminLayout() {
   const hydrated = useAdminHydrated();
   const session = useAdmin((s) => s.session);
-  const logout = useAdmin((s) => s.logout);
+  const customer = useAdmin((s) => s.customer);
+  const admins = useAdmin((s) => s.admins);
   const unread = useAdmin((s) => s.messages.filter((m) => !m.read).length);
   const pending = useAdmin((s) => s.orders.filter((o) => o.status === "pending").length);
 
+  useEffect(() => {
+    if (customer && !session) {
+      const isAdm = admins.some((a) => a.email.toLowerCase() === customer.toLowerCase());
+      if (isAdm) {
+        useAdmin.setState({ session: customer.toLowerCase() });
+      }
+    }
+  }, [customer, session, admins]);
+
   if (!hydrated) return <div className="min-h-screen bg-cream" />;
-  if (!session) return <Login />;
+  if (!session && (!customer || !admins.some((a) => a.email.toLowerCase() === customer.toLowerCase()))) return <Login />;
 
   return (
     <div className="min-h-screen bg-cream text-ink md:grid md:grid-cols-[250px_1fr]">
@@ -64,10 +74,27 @@ function AdminLayout() {
             {n.to === "/admin/customers" && unread > 0 && <span className="rounded-full bg-cream px-2 text-[10px] text-ink">{unread}</span>}
           </Link>
         ))}
-        <div className="mt-auto space-y-1 pt-6 text-sm">
-          <p className="truncate px-3 text-xs opacity-60">{session}</p>
-          <Link to="/" className="flex items-center gap-3 rounded-lg px-3 py-2 opacity-75 hover:bg-cream/10"><ExternalLink className="h-4 w-4" /> View store</Link>
-          <button onClick={logout} className="flex w-full items-center gap-3 rounded-lg px-3 py-2 opacity-75 hover:bg-cream/10"><LogOut className="h-4 w-4" /> Sign out</button>
+        
+        {/* Dedicated Offline Store & POS Button placed at bottom above the email */}
+        <div className="mt-auto space-y-2 pt-6 text-sm">
+          <Link
+            to="/admin/pos"
+            className="flex items-center gap-3 rounded-xl border border-cream/15 bg-cream/10 px-3.5 py-2.5 text-xs font-bold tracking-wider text-cream transition-all hover:bg-cream/20 hover:border-cream/30"
+            activeProps={{ className: "!bg-lime !text-ink !border-lime !opacity-100 font-bold shadow-md" }}
+          >
+            <Store className="h-4 w-4 shrink-0" />
+            <span className="flex-1">Offline Store & POS</span>
+            <span className="rounded-full bg-cream/20 px-1.5 py-0.5 text-[9px] font-mono font-bold uppercase tracking-wider">
+              POS
+            </span>
+          </Link>
+
+          <div className="border-t border-cream/10 pt-3 space-y-1">
+            <p className="truncate px-3 text-xs opacity-60">{session}</p>
+            <Link to="/" className="flex items-center gap-3 rounded-lg px-3 py-2 opacity-75 hover:bg-cream/10">
+              <ExternalLink className="h-4 w-4" /> View store
+            </Link>
+          </div>
         </div>
       </aside>
       <main className="min-w-0 p-5 md:p-10"><Outlet /></main>
